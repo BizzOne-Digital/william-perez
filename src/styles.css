@@ -1,0 +1,416 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-navy: var(--navy);
+  --color-navy-deep: var(--navy-deep);
+  --color-navy-soft: var(--navy-soft);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-cream: var(--cream);
+  --font-display: "Fraunces", Georgia, serif;
+  --font-sans: "Public Sans", system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.5rem;
+
+  --navy-deep: oklch(0.22 0.062 264);
+  --navy: oklch(0.29 0.072 264);
+  --navy-soft: oklch(0.42 0.06 264);
+  --gold: oklch(0.79 0.135 82);
+  --gold-soft: oklch(0.88 0.08 85);
+  --cream: oklch(0.978 0.011 85);
+
+  --background: oklch(0.985 0.008 85);
+  --foreground: oklch(0.24 0.03 264);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.24 0.03 264);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.24 0.03 264);
+  --primary: oklch(0.29 0.072 264);
+  --primary-foreground: oklch(0.985 0.008 85);
+  --secondary: oklch(0.95 0.014 85);
+  --secondary-foreground: oklch(0.29 0.072 264);
+  --muted: oklch(0.95 0.012 85);
+  --muted-foreground: oklch(0.5 0.02 264);
+  --accent: oklch(0.79 0.135 82);
+  --accent-foreground: oklch(0.22 0.062 264);
+  --destructive: oklch(0.55 0.2 27);
+  --destructive-foreground: oklch(0.985 0 0);
+  --border: oklch(0.9 0.014 85);
+  --input: oklch(0.9 0.014 85);
+  --ring: oklch(0.79 0.135 82);
+
+  --shadow-card: 0 1px 2px oklch(0.29 0.072 264 / 0.06), 0 12px 30px -18px oklch(0.29 0.072 264 / 0.35);
+  --shadow-lift: 0 2px 4px oklch(0.29 0.072 264 / 0.08), 0 22px 44px -22px oklch(0.29 0.072 264 / 0.45);
+  --gradient-navy: linear-gradient(160deg, var(--navy-deep), var(--navy) 55%, oklch(0.33 0.075 268));
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+}
+
+@utility surface-navy {
+  background-image: var(--gradient-navy);
+  color: var(--cream);
+}
+
+@utility eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@utility card-lift {
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lift);
+    border-color: color-mix(in oklab, var(--gold) 55%, transparent);
+  }
+}
+
+@keyframes marquee-scroll {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@utility marquee-track {
+  animation: marquee-scroll 38s linear infinite;
+  will-change: transform;
+}
+
+/* ============================================================
+   Hero — cinematic candidate blend
+   The photograph is dissolved into the navy background with a
+   soft mask (no rectangular boundary), then unified with the
+   cool palette via atmospheric navy gradients + film grain.
+   ============================================================ */
+
+/* Transparent navy stops (oklab keeps the fade navy-hued, never grey). */
+:root {
+  --navy-deep-0: color-mix(in oklab, var(--navy-deep) 0%, transparent);
+  --navy-deep-70: color-mix(in oklab, var(--navy-deep) 70%, transparent);
+}
+
+.hero-section {
+  background-color: var(--navy-deep);
+}
+
+/* The photo layer. Masked so its left edge (desktop) melts into navy. */
+.hero-media {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.12) 20%,
+    rgba(0, 0, 0, 0.7) 38%,
+    #000 52%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.12) 20%,
+    rgba(0, 0, 0, 0.7) 38%,
+    #000 52%
+  );
+}
+
+.hero-img {
+  object-position: 56% 22%;
+}
+
+/* Cinematic cooling tint — pulls the warm golden photo toward the
+   navy palette and lifts text contrast, kept light over the candidate. */
+.hero-cool {
+  background:
+    linear-gradient(
+      105deg,
+      var(--navy-deep) 0%,
+      var(--navy-deep-70) 16%,
+      var(--navy-deep-0) 46%
+    ),
+    linear-gradient(
+      to top,
+      var(--navy-deep) 0%,
+      var(--navy-deep-0) 30%
+    );
+  mix-blend-mode: multiply;
+}
+
+/* Atmospheric navy field that sits over the photo, under the text —
+   the "navy → atmosphere → photo" progression and text legibility bed. */
+.hero-blend {
+  background:
+    linear-gradient(
+      100deg,
+      var(--navy-deep) 0%,
+      var(--navy-deep) 20%,
+      var(--navy-deep-70) 34%,
+      var(--navy-deep-0) 56%
+    ),
+    linear-gradient(
+      to top,
+      var(--navy-deep) 0%,
+      var(--navy-deep-0) 26%
+    );
+}
+
+/* Subtle top hairline of atmosphere so the photo top never reads as an edge. */
+.hero-topfade {
+  background: linear-gradient(
+    to bottom,
+    var(--navy-deep) 0%,
+    var(--navy-deep-0) 14%
+  );
+}
+
+/* Very subtle film grain. */
+.hero-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='hg'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23hg)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+  mix-blend-mode: soft-light;
+  opacity: 0.09;
+}
+
+/* Tablet — hold image prominence, ease the fade a touch wider. */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-img {
+    object-position: 60% 20%;
+  }
+  .hero-media {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.7) 34%,
+      #000 50%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0%,
+      rgba(0, 0, 0, 0.7) 34%,
+      #000 50%
+    );
+  }
+}
+
+/* Mobile — stack: the photograph occupies a portrait band at the top of the
+   section (roughly the source image's own aspect ratio, so the headshot is
+   never blown up into an extreme face crop), then dissolves downward into
+   the navy field. Messaging rests on the navy below. */
+@media (max-width: 767px) {
+  :root {
+    /* Height of the photo band; also drives the content's top padding. */
+    --hero-media-h: clamp(19rem, 58svh, 29rem);
+  }
+  .hero-img {
+    object-position: 50% 22%;
+  }
+  .hero-media {
+    top: 0;
+    bottom: auto;
+    height: var(--hero-media-h);
+    -webkit-mask-image: linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(0, 0, 0, 0.18) 16%,
+      rgba(0, 0, 0, 0.85) 42%,
+      #000 62%
+    );
+    mask-image: linear-gradient(
+      to top,
+      transparent 0%,
+      rgba(0, 0, 0, 0.18) 16%,
+      rgba(0, 0, 0, 0.85) 42%,
+      #000 62%
+    );
+  }
+  .hero-cool {
+    background: linear-gradient(
+      to top,
+      var(--navy-deep) 0%,
+      var(--navy-deep-0) 52%
+    );
+  }
+  /* Atmosphere is scoped to the photo band so the navy below stays flat. */
+  .hero-blend {
+    top: 0;
+    bottom: auto;
+    height: var(--hero-media-h);
+    background: linear-gradient(
+      to top,
+      var(--navy-deep) 0%,
+      var(--navy-deep) 14%,
+      var(--navy-deep-70) 38%,
+      var(--navy-deep-0) 70%
+    );
+  }
+  /* Content clears the photo band, overlapping only its dissolved tail. */
+  .hero-content-pad {
+    padding-top: calc(var(--hero-media-h) - 1.5rem);
+  }
+}
+
+/* Left-sided variant (image on the LEFT, dissolving toward the RIGHT).
+   Used by content sections that mirror the hero treatment with text on
+   the right. Mobile keeps the shared bottom-fade above — only desktop &
+   tablet mirror, so these overrides are gated to >= 768px. */
+@media (min-width: 768px) {
+  .hero-media.blend-left {
+    -webkit-mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      rgba(0, 0, 0, 0.12) 20%,
+      rgba(0, 0, 0, 0.7) 38%,
+      #000 52%
+    );
+    mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      rgba(0, 0, 0, 0.12) 20%,
+      rgba(0, 0, 0, 0.7) 38%,
+      #000 52%
+    );
+  }
+  .hero-img.blend-left {
+    object-position: 44% 22%;
+  }
+  .hero-cool.blend-left {
+    background:
+      linear-gradient(
+        255deg,
+        var(--navy-deep) 0%,
+        var(--navy-deep-70) 16%,
+        var(--navy-deep-0) 46%
+      ),
+      linear-gradient(to top, var(--navy-deep) 0%, var(--navy-deep-0) 30%);
+  }
+  .hero-blend.blend-left {
+    background:
+      linear-gradient(
+        260deg,
+        var(--navy-deep) 0%,
+        var(--navy-deep) 20%,
+        var(--navy-deep-70) 34%,
+        var(--navy-deep-0) 56%
+      ),
+      linear-gradient(to top, var(--navy-deep) 0%, var(--navy-deep-0) 26%);
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .hero-media.blend-left {
+    -webkit-mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      rgba(0, 0, 0, 0.7) 34%,
+      #000 50%
+    );
+    mask-image: linear-gradient(
+      to left,
+      transparent 0%,
+      rgba(0, 0, 0, 0.7) 34%,
+      #000 50%
+    );
+  }
+  .hero-img.blend-left {
+    object-position: 40% 20%;
+  }
+}
+
+/* Animated gold accent line — gentle continuous sheen (draw-in is JS-driven). */
+@keyframes hero-sheen {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+.hero-accent-sheen {
+  animation: hero-sheen 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track,
+  .hero-accent-sheen {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
