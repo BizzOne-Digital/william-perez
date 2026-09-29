@@ -34,34 +34,19 @@ export const submitContact = createServerFn({ method: "POST" })
       auth: { user: SMTP_USER, pass: SMTP_PASS },
     });
 
-    try {
-      const info = await transport.sendMail({
-        from: `"Website Contact Form" <${SMTP_USER}>`,
-        to: CONTACT_TO,
-        replyTo: `"${data.name.replace(/"/g, "")}" <${data.email}>`,
-        subject: `Website contact: ${data.subject || "New message"} (from ${data.name})`,
-        text: [
-          `Name: ${data.name}`,
-          `Email: ${data.email}`,
-          `Phone: ${data.phone || "(none)"}`,
-          `Subject: ${data.subject || "(none)"}`,
-          "",
-          data.message,
-        ].join("\n"),
-      });
-      console.log("[contact] SUCCESS email sent", {
-        messageId: info.messageId,
-        response: info.response,
-        subject: data.subject || "(none)",
-      });
-    } catch (err) {
-      const e = err as { code?: string; responseCode?: number; message?: string };
-      console.error("[contact] FAILED to send email", {
-        code: e.code,
-        responseCode: e.responseCode,
-        message: e.message,
-      });
-      throw new Error("Email send failed");
-    }
+    await transport.sendMail({
+      from: `"Website Contact Form" <${SMTP_USER}>`,
+      to: CONTACT_TO,
+      replyTo: `"${data.name.replace(/"/g, "")}" <${data.email}>`,
+      subject: `Website contact: ${data.subject || "New message"} (from ${data.name})`,
+      text: [
+        `Name: ${data.name}`,
+        `Email: ${data.email}`,
+        `Phone: ${data.phone || "(none)"}`,
+        `Subject: ${data.subject || "(none)"}`,
+        "",
+        data.message,
+      ].join("\n"),
+    });
     return { ok: true as const };
   });
