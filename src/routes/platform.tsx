@@ -8,6 +8,7 @@ import {
   ScrollReveal,
   ScrollRevealGroup,
 } from "@/components/motion";
+import { EventTrafficPlan } from "@/components/site/EventTrafficPlan";
 import { PlatformPillar } from "@/components/site/PlatformPillar";
 import { campaign, priorities, stakesStats } from "@/lib/campaign";
 
@@ -169,6 +170,8 @@ function PlatformPage() {
           </ScrollReveal>
         </div>
       </section>
+
+      <EventTrafficPlan />
 
       {/* Closing CTA */}
       <section className="surface-navy relative overflow-hidden">
